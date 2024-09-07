@@ -1,7 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
-import { Notification, ipcRenderer } from "electron";
+import { ipcRenderer } from "electron";
 
 const DELAY_DURATION = 2000; // 2 seconds of waiting to be more 'human'
 const RANDOM_DURATION = 500; // 500 ms randomization so we don't click like robots with the same intervals
