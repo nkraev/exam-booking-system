@@ -7,7 +7,7 @@ const DELAY_DURATION = 2000; // 2 seconds of waiting to be more 'human'
 const RANDOM_DURATION = 500; // 500 ms randomization so we don't click like robots with the same intervals
 const WAIT_DURATION = 1800000; // 30 minutes in milliseconds
 
-const MIN_SEATS = 0;
+const MIN_SEATS = 1;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, DELAY_DURATION + ms + Number.parseInt(`${Math.random() * RANDOM_DURATION}`)));
 function element<T extends HTMLElement = HTMLElement>(id: string): T {
@@ -16,10 +16,7 @@ function element<T extends HTMLElement = HTMLElement>(id: string): T {
 
 const handleBlocked = async () => {
   if (document.body.innerText.length == 0) {
-    new Notification({
-      title: "We are blocked!",
-      body: "We might need to restart the app..."
-    }).show();
+    ipcRenderer.send('app:notification', "We are blocked!", "Press Cmd + Shift + R to force reload, or choose View -> Force Reload");
   }
 }
 
@@ -34,14 +31,6 @@ const handleCookies = async () => {
 }
 
 const handleLogin = async () => {
-  new Notification({
-    title: "Test!",
-    sound: 'Crystal',
-    body: "We might need to restart the app..."
-  }).show();
-
-  return ;
-
   if (document.URL.endsWith("ECFVGlogin.aspx")) {
     console.log("Handling login...");
     await sleep(500);
@@ -100,11 +89,7 @@ const handleMainContent = async () => {
       const seatNumbers = getNumber(totalSeatsText);
       if (seatNumbers >= MIN_SEATS) {
         console.log('Found a seat!');
-        new Notification({
-          title: "Found a seat!",
-          body: "The seat has been found, log in via Chrome or continue here"
-        }).show();
-
+        ipcRenderer.send('app:notification', "Found a seat!", "The seat has been found, log in via Chrome or continue here");
         return;
       }
 
